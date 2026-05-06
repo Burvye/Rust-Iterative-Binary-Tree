@@ -10,31 +10,31 @@ use std::f32::consts::PI;
 
 fn main() -> Result<(), core::convert::Infallible> {
     println!("Hello!");
-    let mut display = SimulatorDisplay::<Rgb888>::new(Size::new(500, 300));
+    let mut display = SimulatorDisplay::<Rgb888>::new(Size::new(1000, 600));
+
     let style = PrimitiveStyleBuilder::new()
         .stroke_color(Rgb888::CSS_ORANGE)
-        .stroke_width(2)
+        .stroke_width(1)
         .fill_color(Rgb888::CYAN)
         .build();
-    let beginning_point = Point { x: 250, y: 300 };
-    Circle::new(beginning_point, 5)
-        .into_styled(style)
-        .draw(&mut display);
+    let beginning_point = Point { x: 500, y: 600 };
     line(
         beginning_point,
-        9,
+        20,
         PI / 12.0 + -PI / 2.0,
-        90.0,
+        170.0,
         &mut display,
+        style.clone(),
     );
     line(
         beginning_point,
-        9,
+        20,
         -PI / 12.0 + -PI / 2.0,
-        90.0,
+        170.0,
         &mut display,
+        style,
     );
-    let output_settings = OutputSettingsBuilder::new().scale(2).build();
+    let output_settings = OutputSettingsBuilder::new().scale(1).build();
 
     Window::new("hl fractal math yay", &output_settings).show_static(&display);
     Ok(())
@@ -45,13 +45,9 @@ fn line(
     angle: f32,
     length: f32,
     display: &mut SimulatorDisplay<Rgb888>,
+    style: PrimitiveStyle<Rgb888>,
 ) {
     let mut stack = Vec::from([(beginning, step, angle, length)]);
-    let style = PrimitiveStyleBuilder::new()
-        .stroke_color(Rgb888::CSS_ORANGE)
-        .stroke_width(2)
-        .fill_color(Rgb888::CYAN)
-        .build();
     while let Some((point_rn, step, angle, length)) = stack.pop() {
         if step < 0 {
             continue;
